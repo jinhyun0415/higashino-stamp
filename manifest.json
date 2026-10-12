@@ -1,12 +1,12 @@
 {
   "name": "히가시노 게이고 도장깨기",
   "short_name": "히가시노 도장깨기",
-  "description": "히가시노 게이고 책 읽기 기록 앱",
+  "description": "히가시노 게이고 작품 완독 기록, 별점과 감상평을 관리하는 독서 도장깨기 앱",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#faf9f5",
-  "theme_color": "#5b6f58",
+  "background_color": "#f7f4ef",
+  "theme_color": "#7d6652",
   "icons": [
     {
       "src": "./icon.svg",

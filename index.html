@@ -1,44 +1,134 @@
 <!doctype html>
-<html lang="ko"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#5b6f58"><link rel="manifest" href="./manifest.json"><link rel="icon" href="./icon.svg">
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#7d6652">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
 <title>히가시노 게이고 도장깨기</title>
 <style>
-:root{--g:#5b6f58;--p:#faf9f5;--line:#e5e5dc;--muted:#74796f;--gold:#d6a83f}
-*{box-sizing:border-box}body{margin:0;background:var(--p);color:#282b27;font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif}
-header{background:var(--g);color:white;padding:25px 18px;border-radius:0 0 22px 22px}h1{font-size:23px;margin:7px 0}header p{margin:0;font-size:13px}
-main{max-width:760px;margin:auto;padding:16px 14px 40px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat,.progress,.year{background:white;border:1px solid var(--line);border-radius:14px}.stat{text-align:center;padding:13px 5px}.stat strong{display:block;color:var(--g);font-size:21px}.stat span{font-size:11px;color:var(--muted)}
-.progress{padding:14px;margin:12px 0}.bar{height:8px;background:#eceee8;border-radius:20px;margin:9px 0;overflow:hidden}.fill{height:100%;background:var(--g);width:0}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.toolbar input{flex:1;min-width:150px}.toolbar input,.toolbar select,.field input,.field textarea{font:inherit;border:1px solid var(--line);background:white;border-radius:10px;padding:11px}.toolbar select{max-width:100%}.section{display:flex;justify-content:space-between;align-items:center;margin:22px 2px 10px}.section h2{font-size:17px;margin:0}.year{overflow:hidden;margin:10px 0}.yearhead{display:flex;justify-content:space-between;background:#f2f4ef;padding:13px 14px;font-weight:700}.yearhead small{color:var(--muted);font-weight:500}.book{display:flex;align-items:center;gap:10px;padding:12px;border-top:1px solid #f0f0ea}.stamp{width:38px;height:38px;flex:0 0 38px;border:1.5px dashed #b9c2b4;border-radius:50%;display:grid;place-items:center;color:#9ba797}.stamp.done{border:2px solid var(--g);background:#e8eee5;color:var(--g)}.info{flex:1;min-width:0}.title{font-size:14px;font-weight:650}.meta{font-size:11px;color:var(--muted);margin-top:3px}.stars{color:var(--gold);font-size:12px;margin-top:3px}button{cursor:pointer}.book button,.secondary{border:1px solid var(--line);background:white;border-radius:9px;padding:9px 10px;color:var(--g)}.book button.donebtn,.primary{background:var(--g);color:white;border-color:var(--g)}.primary{border:0;border-radius:10px;padding:11px 14px;font:inherit}.empty{text-align:center;color:var(--muted);padding:25px}
-dialog{border:0;border-radius:18px;padding:0;width:min(92vw,480px);box-shadow:0 20px 70px #0003}dialog::backdrop{background:#18201877}.modalhead{padding:18px 20px;background:var(--g);color:white}.modalhead h2{font-size:18px;margin:0 0 4px}.modalhead p{font-size:12px;margin:0}.body{padding:18px 20px}.field{margin-bottom:14px}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:6px}.field input,.field textarea{width:100%}.field textarea{min-height:90px}.rating{display:flex;gap:8px}.rating button{font-size:26px;border:0;background:transparent;color:#d8d8ce;padding:0}.rating button.active{color:var(--gold)}.actions{display:flex;justify-content:space-between;gap:8px}.right{display:flex;gap:8px}footer{text-align:center;color:var(--muted);font-size:11px;padding:14px}
-</style></head><body>
-<header><div style="font-size:12px;opacity:.8;letter-spacing:.08em">READING CHALLENGE</div><h1>📚 히가시노 게이고 도장깨기</h1><p>한 권씩 읽고, 나만의 독서 기록을 모아보세요.</p></header>
-<main><div class="stats"><div class="stat"><strong id="done">0</strong><span>완독한 책</span></div><div class="stat"><strong id="pct">0%</strong><span>완독 진행률</span></div><div class="stat"><strong id="avg">—</strong><span>평균 별점</span></div></div>
-<div class="progress"><div style="display:flex;justify-content:space-between;font-size:13px"><b id="level">🥚 시작 단계</b><span id="remaining" style="color:var(--muted)">남은 책</span></div><div class="bar"><div class="fill" id="fill"></div></div><small id="caption" style="color:var(--muted)">첫 번째 도장을 찍어보세요!</small></div>
-<div class="toolbar"><input id="search" placeholder="책 제목 검색…"><select id="filter"><option value="all">전체 책</option><option value="unread">안 읽은 책</option><option value="read">읽은 책</option><option value="rated">평점 있는 책</option></select><button class="secondary" id="addBtn">＋ 책 추가</button></div>
-<div class="section"><h2>연도별 책 목록</h2><small id="shown" style="color:var(--muted)"></small></div><div id="list"></div>
-<footer>기록은 이 기기의 브라우저에 저장됩니다. 브라우저 데이터를 삭제하기 전 기록을 백업해 주세요.</footer></main>
-<dialog id="record"><div class="modalhead"><h2 id="mTitle">독서 기록</h2><p id="mSub">읽은 날짜와 별점, 감상을 기록하세요.</p></div><form class="body" id="recordForm"><input id="id" type="hidden"><div class="field"><label for="date">읽은 날짜</label><input id="date" type="date"></div><div class="field"><label>별점</label><div id="rating" class="rating"></div></div><div class="field"><label for="review">짧은 감상</label><textarea id="review" maxlength="500" placeholder="기억에 남는 장면이나 한 줄 감상"></textarea></div><div class="actions"><button type="button" class="secondary" id="unread">읽지 않음으로</button><div class="right"><button type="button" class="secondary" id="cancel">취소</button><button class="primary">저장</button></div></div></form></dialog>
-<dialog id="add"><div class="modalhead"><h2>책 추가하기</h2><p>목록에 없는 책을 직접 추가할 수 있어요.</p></div><form class="body" id="addForm"><div class="field"><label for="newTitle">책 제목 *</label><input id="newTitle" required maxlength="100"></div><div class="field"><label for="newYear">일본 초판 출간 연도 (선택)</label><input id="newYear" type="number" min="1950" max="2035" placeholder="예: 2020"></div><div class="actions"><span></span><div class="right"><button type="button" class="secondary" id="cancelAdd">취소</button><button class="primary">추가</button></div></div></form></dialog>
+:root{--bg:#f7f4ef;--card:#fff;--ink:#242321;--muted:#817b72;--line:#e8e1d7;--accent:#7d6652;--accent2:#b49a7e;--done:#5e775f}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif}
+.app{max-width:760px;margin:auto;padding:18px 14px 50px}
+header{padding:20px 4px 14px} h1{font-size:27px;margin:0 0 6px;letter-spacing:-1px} .sub{color:var(--muted);font-size:13px}
+.hero{background:linear-gradient(135deg,#463c34,#88715e);color:#fff;border-radius:24px;padding:22px;margin:10px 0 14px;box-shadow:0 12px 30px #4d3f3220}
+.heroTop{display:flex;justify-content:space-between;align-items:end} .big{font-size:36px;font-weight:800;line-height:1} .badge{font-size:13px;background:#ffffff20;padding:7px 10px;border-radius:99px}
+.progress{height:10px;background:#ffffff28;border-radius:99px;overflow:hidden;margin:18px 0 8px} .bar{height:100%;background:#f2dfc5;border-radius:99px;width:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px} .stat{background:#ffffff12;border-radius:14px;padding:10px} .stat b{display:block;font-size:18px} .stat span{font-size:11px;color:#eee}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0} input,select,textarea,button{font:inherit} input[type=search],select{border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px 12px;outline:none} #search{flex:1;min-width:170px} button{border:0;border-radius:12px;padding:10px 13px;cursor:pointer;background:#fff;color:var(--ink);border:1px solid var(--line)} button.primary{background:var(--accent);color:#fff;border-color:var(--accent)} .tabs{display:flex;gap:6px;margin:10px 0 16px;overflow:auto} .tabs button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.year{margin:22px 0 8px;font-size:20px;font-weight:800} .year small{font-size:12px;color:var(--muted);font-weight:500;margin-left:5px}
+.book{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:13px;margin:8px 0;display:flex;align-items:center;gap:12px;transition:.15s} .book.done{border-color:#cad8cb;background:#fbfdfb} .check{width:30px;height:30px;border-radius:50%;border:1px solid #d5cec4;display:grid;place-items:center;flex:0 0 auto;color:#fff;font-size:15px} .done .check{background:var(--done);border-color:var(--done)} .bookmain{min-width:0;flex:1} .title{font-weight:750;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .meta{font-size:12px;color:var(--muted);margin-top:3px} .rating{color:#9b7044;letter-spacing:1px;font-size:12px} .open{background:#f5f1eb;border:0;padding:8px 10px}
+.overlay{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;padding:10px;z-index:5} .modal{width:min(680px,100%);background:#fff;border-radius:24px;padding:20px;max-height:90vh;overflow:auto} .modal h2{margin:0 0 5px;font-size:22px} .modal .muted{color:var(--muted);font-size:13px} label{display:block;font-size:13px;font-weight:700;margin:15px 0 6px} textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:13px;padding:12px;resize:vertical} input[type=date]{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px} .stars{display:flex;gap:5px} .star{font-size:27px;border:0;background:none;padding:0;color:#d8d1c8} .star.on{color:#b37b43} .modalActions{display:flex;gap:8px;margin-top:18px} .modalActions button{flex:1} .footer{text-align:center;color:var(--muted);font-size:11px;margin-top:30px;line-height:1.6}
+.empty{text-align:center;padding:50px 15px;color:var(--muted)} .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#27231f;color:#fff;padding:10px 15px;border-radius:99px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:10} .toast.show{opacity:1}
+@media(min-width:650px){.overlay{align-items:center} .app{padding-top:30px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>📚 히가시노 게이고 도장깨기</h1><div class="sub">읽은 날짜 · 평점 · 소감까지 한 곳에 기록하는 나만의 독서 연표</div></header>
+<section class="hero">
+ <div class="heroTop"><div><div class="big" id="count">0권</div><div>완독했어요</div></div><div class="badge" id="level">🥚 이제 시작</div></div>
+ <div class="progress"><div class="bar" id="bar"></div></div>
+ <div id="pct">0% 완독</div>
+ <div class="stats"><div class="stat"><b id="total">0</b><span>전체 작품</span></div><div class="stat"><b id="avg">-</b><span>평균 평점</span></div><div class="stat"><b id="left">0</b><span>남은 작품</span></div></div>
+</section>
+<div class="controls"><input id="search" type="search" placeholder="🔎 제목 검색"><select id="year"><option value="all">전체 연도</option></select></div>
+<div class="tabs"><button class="active" data-filter="all">전체</button><button data-filter="todo">안 읽음</button><button data-filter="done">읽은 책</button><button data-filter="rated">평점 있음</button></div>
+<main id="list"></main>
+<div class="footer">작품 연도는 초판/刊行 기준으로 정리한 참고용 목록입니다.<br>기록은 이 브라우저에만 저장됩니다. 다른 기기와 자동 동기화되지 않습니다.</div>
+</div>
+<div class="overlay" id="overlay"><div class="modal">
+ <h2 id="modalTitle"></h2><div class="muted" id="modalMeta"></div>
+ <label>완독 날짜</label><input type="date" id="date">
+ <label>평점</label><div class="stars" id="stars"></div>
+ <label>간단 소감</label><textarea id="note" maxlength="500" placeholder="읽고 난 뒤의 생각을 자유롭게 적어보세요."></textarea>
+ <div class="modalActions"><button id="close">취소</button><button class="primary" id="save">저장하기</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
 <script>
-const BOOKS=[
-[1985,"방과 후"],[1986,"졸업"],[1987,"백마산장 살인사건"],[1988,"학생가의 살인"],[1989,"잠자는 숲"],[1989,"십자 저택의 피에로"],[1990,"브루투스의 심장"],[1990,"회랑정 살인사건"],[1991,"숙명"],[1992,"변신"],[1992,"분신"],[1993,"아름다운 흉기"],[1994,"옛날에 내가 죽은 집"],[1995,"가면산장 살인사건"],[1996,"명탐정의 규칙"],[1996,"탐정 갈릴레오"],[1998,"비밀"],[1999,"백야행"],[2000,"짝사랑"],[2001,"편지"],[2002,"레몬"],[2003,"용의자 X의 헌신"],[2004,"환야"],[2005,"방황하는 칼날"],[2006,"붉은 손가락"],[2006,"거짓말, 딱 한 개만 더"],[2008,"유성의 인연"],[2009,"신참자"],[2010,"플래티나 데이터"],[2011,"기린의 날개"],[2012,"나미야 잡화점의 기적"],[2013,"기도의 막이 내릴 때"],[2015,"라플라스의 마녀"],[2016,"위험한 비너스"],[2017,"그대 눈동자에 건배"],[2018,"마력의 태동"],[2019,"녹나무의 파수꾼"],[2021,"백조와 박쥐"],[2023,"당신이 누군가를 죽였다"]
-].map((x,i)=>({id:"b"+i,year:x[0],title:x[1]}));
-const KEY="higashino_stamp_v1";let records={},custom=[],stars=0;
-try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");records=s.records||{};custom=s.custom||[]}catch(e){}
-const $=x=>document.getElementById(x), all=()=>[...BOOKS,...custom].sort((a,b)=>(b.year||0)-(a.year||0)||a.title.localeCompare(b.title,"ko"));
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function save(){localStorage.setItem(KEY,JSON.stringify({records,custom}));render()}
-function render(){let books=all(),done=books.filter(b=>records[b.id]?.done).length,ratings=books.map(b=>records[b.id]?.rating).filter(Boolean),pct=Math.round(done/books.length*100);
-$("done").textContent=done;$("pct").textContent=pct+"%";$("avg").textContent=ratings.length?(ratings.reduce((a,b)=>a+b,0)/ratings.length).toFixed(1)+" ★":"—";$("remaining").textContent="남은 책 "+(books.length-done)+"권";$("fill").style.width=pct+"%";$("level").textContent=done===0?"🥚 시작 단계":done>=books.length?"👑 완독 달성!":done>=50?"🥇 금메달 단계":done>=20?"🥈 은메달 단계":done>=10?"🥉 동메달 단계":"🌱 차근차근 읽는 중";$("caption").textContent=`총 ${books.length}권 중 ${done}권 완독`;
-let q=$("search").value.trim().toLowerCase(),f=$("filter").value;let list=books.filter(b=>{let r=records[b.id]||{};return(!q||b.title.toLowerCase().includes(q))&&(f==="all"||(f==="unread"&&!r.done)||(f==="read"&&r.done)||(f==="rated"&&r.rating))});$("shown").textContent=list.length+"권 표시";let groups={};list.forEach(b=>{let y=b.year||"연도 미상";(groups[y]??=[]).push(b)});
-$("list").innerHTML=Object.keys(groups).sort((a,b)=>Number(b||0)-Number(a||0)).map(y=>`<section class="year"><div class="yearhead"><span>${esc(y)}년</span><small>${groups[y].filter(b=>records[b.id]?.done).length}/${groups[y].length} 완독</small></div>${groups[y].map(b=>{let r=records[b.id]||{},d=!!r.done;return `<div class="book"><div class="stamp ${d?"done":""}">${d?"✓":"○"}</div><div class="info"><div class="title">${esc(b.title)}</div><div class="meta">${d?"완독 "+esc(r.date||"기록"):"아직 읽지 않음"}${r.review?" · 감상 있음":""}</div>${r.rating?`<div class="stars">${"★".repeat(r.rating)}${"☆".repeat(5-r.rating)}</div>`:""}</div><button class="${d?"donebtn":""}" data-id="${esc(b.id)}">${d?"기록 보기":"기록하기"}</button></div>`}).join("")}</section>`).join("")||'<div class="empty">조건에 맞는 책이 없어요.</div>';
-document.querySelectorAll("[data-id]").forEach(b=>b.onclick=()=>openRecord(b.dataset.id))}
-function drawStars(){$("rating").innerHTML=[1,2,3,4,5].map(n=>`<button type="button" class="${n<=stars?"active":""}" data-star="${n}">★</button>`).join("");document.querySelectorAll("[data-star]").forEach(b=>b.onclick=()=>{stars=+b.dataset.star;drawStars()})}
-function openRecord(id){let b=all().find(x=>x.id===id),r=records[id]||{};$("id").value=id;$("mTitle").textContent=b.title;$("mSub").textContent=(b.year?b.year+"년 출간 · ":"")+"독서 기록을 남겨보세요.";$("date").value=r.date||new Date().toISOString().slice(0,10);$("review").value=r.review||"";stars=r.rating||0;drawStars();$("record").showModal()}
-$("recordForm").onsubmit=e=>{e.preventDefault();records[$("id").value]={done:true,date:$("date").value,rating:stars,review:$("review").value.trim()};$("record").close();save()};
-$("unread").onclick=()=>{delete records[$("id").value];$("record").close();save()};$("cancel").onclick=()=>$("record").close();$("search").oninput=render;$("filter").onchange=render;
-$("addBtn").onclick=()=>{$("newTitle").value="";$("newYear").value="";$("add").showModal()};$("cancelAdd").onclick=()=>$("add").close();
-$("addForm").onsubmit=e=>{e.preventDefault();custom.push({id:"c"+Date.now(),title:$("newTitle").value.trim(),year:+$("newYear").value||null});$("add").close();save()};
-if("serviceWorker"in navigator&&location.protocol.startsWith("http"))addEventListener("load",()=>navigator.serviceWorker.register("./service-worker.js").catch(()=>{}));render();
-</script></body></html>
+const books=[{"id": "1985-1", "year": 1985, "title": "방과 후"}, {"id": "1986-2", "year": 1986, "title": "졸업"}, {"id": "1986-3", "year": 1986, "title": "백마산장 살인사건"}, {"id": "1987-4", "year": 1987, "title": "학생가의 살인"}, {"id": "1987-5", "year": 1987, "title": "11문자의 살인"}, {"id": "1988-6", "year": 1988, "title": "마구"}, {"id": "1988-7", "year": 1988, "title": "윙크로 건배"}, {"id": "1988-8", "year": 1988, "title": "나니와 소년탐정단"}, {"id": "1989-9", "year": 1989, "title": "십자 저택의 피에로"}, {"id": "1989-10", "year": 1989, "title": "잠자는 숲"}, {"id": "1989-11", "year": 1989, "title": "조인 계획"}, {"id": "1989-12", "year": 1989, "title": "살인 현장은 구름 위"}, {"id": "1989-13", "year": 1989, "title": "브루투스의 심장"}, {"id": "1990-14", "year": 1990, "title": "숙명"}, {"id": "1990-15", "year": 1990, "title": "탐정클럽"}, {"id": "1991-16", "year": 1991, "title": "변신"}, {"id": "1992-17", "year": 1992, "title": "수상한 사람들"}, {"id": "1992-18", "year": 1992, "title": "패럴렐 월드 러브스토리"}, {"id": "1993-19", "year": 1993, "title": "아름다운 흉기"}, {"id": "1993-20", "year": 1993, "title": "레몬"}, {"id": "1994-21", "year": 1994, "title": "옛날의 꿈"}, {"id": "1995-22", "year": 1995, "title": "괴소설"}, {"id": "1995-23", "year": 1995, "title": "흑소소설"}, {"id": "1996-24", "year": 1996, "title": "독소소설"}, {"id": "1996-25", "year": 1996, "title": "어느 쪽인가 그녀를 죽였다"}, {"id": "1996-26", "year": 1996, "title": "악의"}, {"id": "1997-27", "year": 1997, "title": "탐정 갈릴레오"}, {"id": "1998-28", "year": 1998, "title": "비밀"}, {"id": "1998-29", "year": 1998, "title": "나미야 잡화점의 기적"}, {"id": "1999-30", "year": 1999, "title": "내가 그를 죽였다"}, {"id": "1999-31", "year": 1999, "title": "백야행"}, {"id": "2000-32", "year": 2000, "title": "둘 중 하나가 그녀를 죽였다"}, {"id": "2000-33", "year": 2000, "title": "예지몽"}, {"id": "2000-34", "year": 2000, "title": "거짓말을 하나 더"}, {"id": "2001-35", "year": 2001, "title": "짝사랑"}, {"id": "2001-36", "year": 2001, "title": "초·살인사건"}, {"id": "2002-37", "year": 2002, "title": "레이크사이드"}, {"id": "2002-38", "year": 2002, "title": "시계"}, {"id": "2002-39", "year": 2002, "title": "게임의 이름은 유괴"}, {"id": "2003-40", "year": 2003, "title": "편지"}, {"id": "2003-41", "year": 2003, "title": "오레오 비정근"}, {"id": "2003-42", "year": 2003, "title": "살인의 문"}, {"id": "2004-43", "year": 2004, "title": "환야"}, {"id": "2004-44", "year": 2004, "title": "도전?"}, {"id": "2004-45", "year": 2004, "title": "방황하는 칼날"}, {"id": "2005-46", "year": 2005, "title": "흑소설"}, {"id": "2005-47", "year": 2005, "title": "용의자 X의 헌신"}, {"id": "2005-48", "year": 2005, "title": "과학?"}, {"id": "2006-49", "year": 2006, "title": "꿈은 토리노를 달린다"}, {"id": "2006-50", "year": 2006, "title": "붉은 손가락"}, {"id": "2006-51", "year": 2006, "title": "사명과 영혼의 리미트"}, {"id": "2007-52", "year": 2007, "title": "아마 마지막 인사"}, {"id": "2007-53", "year": 2007, "title": "새벽 거리에서"}, {"id": "2007-54", "year": 2007, "title": "다잉 아이"}, {"id": "2008-55", "year": 2008, "title": "유성의 인연"}, {"id": "2008-56", "year": 2008, "title": "성녀의 구제"}, {"id": "2008-57", "year": 2008, "title": "갈릴레오의 고뇌"}, {"id": "2009-58", "year": 2009, "title": "패러독스 13"}, {"id": "2009-59", "year": 2009, "title": "신참자"}, {"id": "2010-60", "year": 2010, "title": "까마귀의 알은 누구의 것"}, {"id": "2010-61", "year": 2010, "title": "플래티나 데이터"}, {"id": "2010-62", "year": 2010, "title": "백은의 잭"}, {"id": "2011-63", "year": 2011, "title": "그 시절의 누군가"}, {"id": "2011-64", "year": 2011, "title": "기린의 날개"}, {"id": "2011-65", "year": 2011, "title": "한여름의 방정식"}, {"id": "2011-66", "year": 2011, "title": "마스커레이드 호텔"}, {"id": "2012-67", "year": 2012, "title": "왜소소설"}, {"id": "2012-68", "year": 2012, "title": "나미야 잡화점의 기적"}, {"id": "2012-69", "year": 2012, "title": "허상의 광대"}, {"id": "2013-70", "year": 2013, "title": "몽환화"}, {"id": "2013-71", "year": 2013, "title": "기도의 막이 내릴 때"}, {"id": "2013-72", "year": 2013, "title": "질풍론도"}, {"id": "2014-73", "year": 2014, "title": "공허한 십자가"}, {"id": "2014-74", "year": 2014, "title": "마스커레이드 이브"}, {"id": "2015-75", "year": 2015, "title": "라플라스의 마녀"}, {"id": "2015-76", "year": 2015, "title": "금단의 마술"}, {"id": "2015-77", "year": 2015, "title": "인어가 잠든 집"}, {"id": "2016-78", "year": 2016, "title": "위험한 비너스"}, {"id": "2016-79", "year": 2016, "title": "사랑의 곤돌라"}, {"id": "2016-80", "year": 2016, "title": "설산 체이스"}, {"id": "2017-81", "year": 2017, "title": "멋진 일본인"}, {"id": "2017-82", "year": 2017, "title": "마스커레이드 나이트"}, {"id": "2018-83", "year": 2018, "title": "마력의 태동"}, {"id": "2018-84", "year": 2018, "title": "침묵의 퍼레이드"}, {"id": "2019-85", "year": 2019, "title": "희망의 실"}, {"id": "2020-86", "year": 2020, "title": "쿠스노키의 번인"}, {"id": "2020-87", "year": 2020, "title": "블랙 쇼맨과 이름 없는 마을의 살인"}, {"id": "2021-88", "year": 2021, "title": "백조와 박쥐"}, {"id": "2021-89", "year": 2021, "title": "투명한 나선"}, {"id": "2022-90", "year": 2022, "title": "마스커레이드 게임"}, {"id": "2023-91", "year": 2023, "title": "마녀와 함께한 7일간"}, {"id": "2023-92", "year": 2023, "title": "당신이 누군가를 죽였다"}, {"id": "2024-93", "year": 2024, "title": "블랙 쇼맨과 각성하는 여자들"}, {"id": "2024-94", "year": 2024, "title": "쿠스노키의 여신"}, {"id": "2024-95", "year": 2024, "title": "가공범"}, {"id": "2025-96", "year": 2025, "title": "마스커레이드 라이프"}, {"id": "2026-97", "year": 2026, "title": "작은 고의의 이야기"}, {"id": "2026-98", "year": 2026, "title": "영원의 기억"}];
+let records=JSON.parse(localStorage.getItem('higashinoRecords')||'{}');
+(function migratePreviousPwaData(){
+  try {
+    const oldState=JSON.parse(localStorage.getItem('higashino_stamp_v1')||'{}');
+    const oldRecords=oldState.records||{};
+    const previousBooks=[{"id": "b0", "year": 1985, "title": "방과 후"}, {"id": "b1", "year": 1986, "title": "졸업"}, {"id": "b2", "year": 1987, "title": "백마산장 살인사건"}, {"id": "b3", "year": 1988, "title": "학생가의 살인"}, {"id": "b4", "year": 1989, "title": "잠자는 숲"}, {"id": "b5", "year": 1989, "title": "십자 저택의 피에로"}, {"id": "b6", "year": 1990, "title": "브루투스의 심장"}, {"id": "b7", "year": 1990, "title": "회랑정 살인사건"}, {"id": "b8", "year": 1991, "title": "숙명"}, {"id": "b9", "year": 1992, "title": "변신"}, {"id": "b10", "year": 1992, "title": "분신"}, {"id": "b11", "year": 1993, "title": "아름다운 흉기"}, {"id": "b12", "year": 1994, "title": "옛날에 내가 죽은 집"}, {"id": "b13", "year": 1995, "title": "가면산장 살인사건"}, {"id": "b14", "year": 1996, "title": "명탐정의 규칙"}, {"id": "b15", "year": 1996, "title": "탐정 갈릴레오"}, {"id": "b16", "year": 1998, "title": "비밀"}, {"id": "b17", "year": 1999, "title": "백야행"}, {"id": "b18", "year": 2000, "title": "짝사랑"}, {"id": "b19", "year": 2001, "title": "편지"}, {"id": "b20", "year": 2002, "title": "레몬"}, {"id": "b21", "year": 2003, "title": "용의자 X의 헌신"}, {"id": "b22", "year": 2004, "title": "환야"}, {"id": "b23", "year": 2005, "title": "방황하는 칼날"}, {"id": "b24", "year": 2006, "title": "붉은 손가락"}, {"id": "b25", "year": 2006, "title": "거짓말, 딱 한 개만 더"}, {"id": "b26", "year": 2008, "title": "유성의 인연"}, {"id": "b27", "year": 2009, "title": "신참자"}, {"id": "b28", "year": 2010, "title": "플래티나 데이터"}, {"id": "b29", "year": 2011, "title": "기린의 날개"}, {"id": "b30", "year": 2012, "title": "나미야 잡화점의 기적"}, {"id": "b31", "year": 2013, "title": "기도의 막이 내릴 때"}, {"id": "b32", "year": 2015, "title": "라플라스의 마녀"}, {"id": "b33", "year": 2016, "title": "위험한 비너스"}, {"id": "b34", "year": 2017, "title": "그대 눈동자에 건배"}, {"id": "b35", "year": 2018, "title": "마력의 태동"}, {"id": "b36", "year": 2019, "title": "녹나무의 파수꾼"}, {"id": "b37", "year": 2021, "title": "백조와 박쥐"}, {"id": "b38", "year": 2023, "title": "당신이 누군가를 죽였다"}];
+    previousBooks.forEach(oldBook=>{
+      const saved=oldRecords[oldBook.id];
+      if(!saved) return;
+      const target=books.find(b=>b.year===Number(oldBook.year)&&b.title===oldBook.title)
+        || books.find(b=>b.title===oldBook.title);
+      if(target && !records[target.id]) records[target.id]=saved;
+    });
+    (oldState.custom||[]).forEach(customBook=>{
+      if(!customBook || !customBook.title) return;
+      let target=books.find(b=>b.year===Number(customBook.year)&&b.title===customBook.title);
+      if(!target){
+        target={id:String(customBook.id||('custom-'+Date.now()+'-'+Math.random().toString(36).slice(2,7))),
+          year:Number(customBook.year)||null,title:String(customBook.title)};
+        books.push(target);
+      }
+      if(oldRecords[customBook.id] && !records[target.id]) records[target.id]=oldRecords[customBook.id];
+    });
+    localStorage.setItem('higashinoRecords',JSON.stringify(records));
+  } catch(e) {
+    // Keep the app usable even if an old browser record cannot be migrated.
+  }
+})();
+let filter='all', current=null, rating=0;
+const $=id=>document.getElementById(id);
+const years=[...new Set(books.map(b=>b.year))];
+years.forEach(y=>{let o=document.createElement('option');o.value=y;o.textContent=y+'년';$('year').appendChild(o)});
+
+function saveAll(){localStorage.setItem('higashinoRecords',JSON.stringify(records));}
+function isDone(b){return !!records[b.id]?.done}
+function starsText(n){return n?'★'.repeat(n)+'☆'.repeat(5-n):''}
+function render(){
+ const q=$('search').value.trim().toLowerCase(), yf=$('year').value;
+ let arr=books.filter(b=>(yf==='all'||String(b.year)===yf)&&b.title.toLowerCase().includes(q));
+ arr=arr.filter(b=>filter==='all'||(filter==='done'&&isDone(b))||(filter==='todo'&&!isDone(b))||(filter==='rated'&&records[b.id]?.rating));
+ $('list').innerHTML='';
+ if(!arr.length){$('list').innerHTML='<div class="empty">조건에 맞는 책이 없어요.</div>';return}
+ let last=null;
+ arr.forEach(b=>{
+   if(last!==b.year){last=b.year;let h=document.createElement('div');h.className='year';h.innerHTML=b.year+'년 <small>'+books.filter(x=>x.year===b.year&&isDone(x)).length+'/'+books.filter(x=>x.year===b.year).length+'권 완독</small>';$('list').appendChild(h)}
+   const r=records[b.id]||{};
+   let d=document.createElement('div');d.className='book '+(r.done?'done':'');
+   d.innerHTML=`<div class="check">${r.done?'✓':''}</div><div class="bookmain"><div class="title">${b.title}</div><div class="meta">${b.year} · ${r.date||'아직 읽지 않음'} ${r.rating?' · <span class="rating">'+starsText(r.rating)+'</span>':''}</div></div><button class="open">기록</button>`;
+   d.onclick=()=>openModal(b); $('list').appendChild(d);
+ });
+ updateStats();
+}
+function updateStats(){
+ const done=books.filter(isDone), avg=done.filter(b=>records[b.id]?.rating).reduce((s,b)=>s+records[b.id].rating,0)/(done.filter(b=>records[b.id]?.rating).length||1);
+ const p=Math.round(done.length/books.length*100);
+ $('count').textContent=done.length+'권'; $('total').textContent=books.length; $('left').textContent=books.length-done.length; $('pct').textContent=p+'% 완독'; $('bar').style.width=p+'%';
+ $('avg').textContent=done.some(b=>records[b.id]?.rating)?avg.toFixed(1):'-';
+ let level=done.length>=books.length?'👑 마스터':done.length>=50?'🥇 고급':done.length>=20?'🥈 중급':done.length>=10?'🥉 초급':'🥚 이제 시작'; $('level').textContent=level;
+}
+function openModal(b){
+ current=b; const r=records[b.id]||{}; rating=r.rating||0;
+ $('modalTitle').textContent=b.title; $('modalMeta').textContent=b.year+'년 출간 · 도장깨기 기록';
+ $('date').value=r.date||''; $('note').value=r.note||''; drawStars(); $('overlay').style.display='flex';
+}
+function drawStars(){$('stars').innerHTML='';for(let i=1;i<=5;i++){let s=document.createElement('button');s.className='star '+(i<=rating?'on':'');s.textContent='★';s.onclick=()=>{rating=i;drawStars()};$('stars').appendChild(s)}}
+$('save').onclick=()=>{
+ const date=$('date').value, note=$('note').value.trim();
+ records[current.id]={done:true,date,rating,note}; saveAll(); $('overlay').style.display='none'; render(); toast('기록을 저장했어요 ✨');
+};
+$('close').onclick=()=>$('overlay').style.display='none';
+$('overlay').onclick=e=>{if(e.target===$('overlay'))$('overlay').style.display='none'};
+$('search').oninput=render;$('year').onchange=render;
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.filter;render()});
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1600)}
+render();
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  });
+}
+</script>
+</body></html>
